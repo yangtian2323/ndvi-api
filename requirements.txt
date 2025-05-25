@@ -3,5 +3,6 @@ fastapi
 uvicorn
 numpy
 opencv-python
-pillow
+Pillow
 python-multipart
+asttokens==2.2.1
