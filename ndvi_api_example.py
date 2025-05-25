@@ -44,3 +44,27 @@ async def analyze_ndvi(red_band: UploadFile = File(...), nir_band: UploadFile = 
         "ndvi_summary": f"该区域NDVI平均值为 {np.round(mean_ndvi, 3)}，植被覆盖度{'较高' if mean_ndvi > 0.4 else '一般' if mean_ndvi > 0.2 else '较低'}。",
         "ndvi_image_base64": ndvi_image_base64
     }
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware  # ✅ 添加此行
+import numpy as np
+import cv2
+from io import BytesIO
+from PIL import Image
+import base64
+
+app = FastAPI()
+
+# ✅ 添加 CORS 跨域支持
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 或改成 ["https://resplendent-croquembouche-8d070d.netlify.app"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/analyze_ndvi/")
+async def analyze_ndvi(
+    red_band: UploadFile = File(...),
+    nir_band: UploadFile = File(...)
+):
